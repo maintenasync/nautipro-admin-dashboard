@@ -16,8 +16,6 @@ import CrewManagement from './components/pages/CrewManagement';
 import Companies from './components/pages/Companies';
 import Vessels from './components/pages/Vessels';
 import License from './components/pages/License';
-import Invitations from './components/pages/Invitations';
-import NotificationSetting from './components/pages/NotificationSetting';
 import UserSettings from './components/pages/UserSettings';
 import CreateCompany from './components/pages/CreateCompany';
 import CreateVessel from './components/pages/CreateVessel';

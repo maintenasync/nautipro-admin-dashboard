@@ -291,7 +291,7 @@ export default function TopBar({
                                         {state.user?.name || 'User'}
                                     </p>
                                     <p className="text-xs text-gray-500 [data-theme='dark']_&:text-gray-400">
-                                        {state.user?.role || 'Member'}
+                                        {state.user?.role || 'Admin'}
                                     </p>
                                 </div>
 
