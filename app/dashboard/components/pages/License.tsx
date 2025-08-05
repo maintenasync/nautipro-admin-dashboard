@@ -5,6 +5,7 @@
 import { useState } from 'react';
 import { useFilteredLicenses, useCompanies, useAllVessels } from '@/app/hooks/useApiQuery';
 import LicenseDetailDialog from '../dialogs/LicenseDetailDialog';
+import LicenseFormDialog from '../dialogs/LicenseFormDialog';
 
 export default function License() {
     const [filters, setFilters] = useState({
@@ -16,6 +17,10 @@ export default function License() {
 
     const [showDetailDialog, setShowDetailDialog] = useState(false);
     const [selectedLicenseId, setSelectedLicenseId] = useState<string | null>(null);
+
+    // Form dialog states
+    const [showFormDialog, setShowFormDialog] = useState(false);
+    const [selectedLicenseForEdit, setSelectedLicenseForEdit] = useState<any>(null);
 
     // Fetch data using custom hooks
     const { data: licenses = [], isLoading, error, refetch } = useFilteredLicenses(filters);
@@ -75,6 +80,29 @@ export default function License() {
     const handleCloseDetailDialog = () => {
         setShowDetailDialog(false);
         setSelectedLicenseId(null);
+    };
+
+    // Handle create new license
+    const handleCreateLicense = () => {
+        setSelectedLicenseForEdit(null);
+        setShowFormDialog(true);
+    };
+
+    // Handle edit license
+    const handleEditLicense = (license: any) => {
+        setSelectedLicenseForEdit(license);
+        setShowFormDialog(true);
+    };
+
+    // Handle form dialog close
+    const handleCloseFormDialog = () => {
+        setShowFormDialog(false);
+        setSelectedLicenseForEdit(null);
+    };
+
+    // Handle form success
+    const handleFormSuccess = () => {
+        refetch(); // Refresh the licenses list
     };
 
     // Loading state
@@ -169,7 +197,10 @@ export default function License() {
                     <h1 className="text-2xl font-bold text-gray-800 [data-theme='dark']_&:text-white">License Management</h1>
                     <p className="text-gray-600 [data-theme='dark']_&:text-gray-400 mt-1">Manage vessel and crew licenses</p>
                 </div>
-                <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-150 flex items-center space-x-2">
+                <button
+                    onClick={handleCreateLicense}
+                    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-150 flex items-center space-x-2"
+                >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                     </svg>
@@ -345,12 +376,12 @@ export default function License() {
                                         >
                                             View Details
                                         </button>
-                                        {/*<button className="text-green-600 hover:text-green-900 [data-theme='dark']_&:text-green-400 [data-theme='dark']_&:hover:text-green-300 mr-4">*/}
-                                        {/*    Renew*/}
-                                        {/*</button>*/}
-                                        {/*<button className="text-indigo-600 hover:text-indigo-900 [data-theme='dark']_&:text-indigo-400 [data-theme='dark']_&:hover:text-indigo-300">*/}
-                                        {/*    Edit*/}
-                                        {/*</button>*/}
+                                        <button
+                                            onClick={() => handleEditLicense(license)}
+                                            className="text-green-600 hover:text-green-900 [data-theme='dark']_&:text-green-400 [data-theme='dark']_&:hover:text-green-300 mr-4"
+                                        >
+                                            Edit
+                                        </button>
                                     </td>
                                 </tr>
                             ))}
@@ -371,7 +402,10 @@ export default function License() {
                         }
                     </p>
                     <div className="mt-6">
-                        <button className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                        <button
+                            onClick={handleCreateLicense}
+                            className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                        >
                             <svg className="-ml-1 mr-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
                             </svg>
@@ -386,6 +420,14 @@ export default function License() {
                 isOpen={showDetailDialog}
                 licenseId={selectedLicenseId}
                 onClose={handleCloseDetailDialog}
+            />
+
+            {/* License Form Dialog */}
+            <LicenseFormDialog
+                isOpen={showFormDialog}
+                licenseData={selectedLicenseForEdit}
+                onClose={handleCloseFormDialog}
+                onSuccess={handleFormSuccess}
             />
         </div>
     );

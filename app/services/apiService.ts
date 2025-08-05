@@ -381,18 +381,6 @@ class ApiService {
         return this.request<License[]>('/get-maintena-licenses');
     }
 
-    async getInvitations(): Promise<ApiResponse<Invitation[]>> {
-        return this.request<Invitation[]>('/get-invitations-vessel-member-maintena');
-    }
-
-    async acceptInvitation(invitationId: number): Promise<ApiResponse<any>> {
-        return this.request<any>(`/accept-invitation-vessel-member-maintena/${invitationId}`);
-    }
-
-    async rejectInvitation(invitationId: number): Promise<ApiResponse<any>> {
-        return this.request<any>(`/reject-invitation-vessel-member-maintena/${invitationId}`);
-    }
-
     isAuthenticated(): boolean {
         try {
             authService.getAuthHeaders();

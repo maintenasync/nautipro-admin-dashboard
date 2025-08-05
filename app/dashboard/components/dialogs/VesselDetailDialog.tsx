@@ -203,22 +203,22 @@ export default function VesselDetailDialog({
                         </div>
                     </div>
                     <div className="flex items-center space-x-2">
-                        {onEdit && (
-                            <button
-                                onClick={handleEdit}
-                                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-150 text-sm"
-                            >
-                                Edit Vessel
-                            </button>
-                        )}
-                        {onDelete && (
-                            <button
-                                onClick={handleDelete}
-                                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-150 text-sm"
-                            >
-                                Delete
-                            </button>
-                        )}
+                        {/*{onEdit && (*/}
+                        {/*    <button*/}
+                        {/*        onClick={handleEdit}*/}
+                        {/*        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-150 text-sm"*/}
+                        {/*    >*/}
+                        {/*        Edit Vessel*/}
+                        {/*    </button>*/}
+                        {/*)}*/}
+                        {/*{onDelete && (*/}
+                        {/*    <button*/}
+                        {/*        onClick={handleDelete}*/}
+                        {/*        className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-150 text-sm"*/}
+                        {/*    >*/}
+                        {/*        Delete*/}
+                        {/*    </button>*/}
+                        {/*)}*/}
                         <button
                             onClick={handleClose}
                             className="text-gray-400 hover:text-gray-600 p-2 rounded-md hover:bg-gray-100 transition-colors duration-150 [data-theme='dark']_&:hover:bg-gray-700"
