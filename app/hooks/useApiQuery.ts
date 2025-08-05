@@ -22,6 +22,123 @@ import type {
     NotificationSettingRequest,
     NotificationSettingUI
 } from '@/app/types/api';
+import invoiceService from '@/app/services/invoiceService';
+import type { Invoice, InvoiceUI, CreateInvoiceRequest, UpdateInvoiceRequest, InvoiceFilters } from '@/app/types/invoice';
+
+// Transform function untuk invoice
+const transformInvoiceForUI = (invoice: Invoice): InvoiceUI => {
+    const formatPrice = (price: string) => {
+        const numPrice = parseInt(price);
+        return `Rp ${numPrice.toLocaleString('id-ID')}`;
+    };
+
+    const formatDate = (timestamp: string) => {
+        if (!timestamp || timestamp === '0' || timestamp === '') return '-';
+        return new Date(parseInt(timestamp)).toLocaleDateString('id-ID', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+        });
+    };
+
+    const status = invoice.payment_status ? 'Paid' : 'Unpaid';
+    const statusColor = invoice.payment_status
+        ? 'bg-green-100 text-green-800 [data-theme=\'dark\']_&:bg-green-900 [data-theme=\'dark\']_&:text-green-200'
+        : 'bg-red-100 text-red-800 [data-theme=\'dark\']_&:bg-red-900 [data-theme=\'dark\']_&:text-red-200';
+
+    return {
+        id: invoice.id,
+        invoice_code: invoice.invoice_code,
+        price: invoice.price,
+        formatted_price: formatPrice(invoice.price),
+        payment_method: invoice.payment_method,
+        payment_status: status,
+        payment_receipt: invoice.payment_receipt,
+        paid_at: invoice.paid_at,
+        formatted_paid_at: formatDate(invoice.paid_at),
+        created_at: invoice.created_at,
+        formatted_created_at: formatDate(invoice.created_at),
+        updated_at: invoice.updated_at,
+        status_color: statusColor,
+    };
+};
+
+// ========== INVOICE HOOKS ==========
+
+export const useInvoices = () => {
+    return useQuery({
+        queryKey: ['invoices'],
+        queryFn: async () => {
+            try {
+                const response = await invoiceService.getInvoices();
+                return response.data.map(transformInvoiceForUI);
+            } catch (error) {
+                console.error("Error fetching invoices:", error);
+                return [];
+            }
+        },
+        staleTime: 5 * 60 * 1000, // 5 minutes
+    });
+};
+
+export const useFilteredInvoices = (filters: InvoiceFilters) => {
+    const { data: invoices, ...query } = useInvoices();
+
+    const filteredInvoices = invoices?.filter(invoice => {
+        const matchesPaymentMethod = !filters.payment_method ||
+            filters.payment_method === 'All Methods' ||
+            invoice.payment_method === filters.payment_method;
+
+        const matchesPaymentStatus = !filters.payment_status ||
+            filters.payment_status === 'All Status' ||
+            invoice.payment_status === filters.payment_status;
+
+        const matchesSearch = !filters.search ||
+            invoice.invoice_code.toLowerCase().includes(filters.search.toLowerCase()) ||
+            invoice.payment_method.toLowerCase().includes(filters.search.toLowerCase());
+
+        return matchesPaymentMethod && matchesPaymentStatus && matchesSearch;
+    }) || [];
+
+    return {
+        ...query,
+        data: filteredInvoices,
+    };
+};
+
+export const useCreateInvoice = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (data: CreateInvoiceRequest) => invoiceService.createInvoice(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['invoices'] });
+        },
+    });
+};
+
+export const useUpdateInvoice = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (data: UpdateInvoiceRequest) => invoiceService.updateInvoice(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['invoices'] });
+        },
+    });
+};
+
+export const useUploadPaymentReceipt = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ invoiceId, receiptFile }: { invoiceId: number; receiptFile: File }) =>
+            invoiceService.uploadPaymentReceipt(invoiceId, receiptFile),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['invoices'] });
+        },
+    });
+};
 
 // Transform function untuk notification setting
 const transformNotificationSettingForUI = (setting: NotificationSetting): NotificationSettingUI => ({

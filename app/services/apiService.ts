@@ -389,6 +389,112 @@ class ApiService {
             return false;
         }
     }
+
+    // ========== INVOICE API ==========
+
+    async getInvoices(): Promise<ApiResponse<{
+        id: number;
+        invoice_code: string;
+        price: string;
+        payment_method: string;
+        payment_status: boolean;
+        payment_receipt: string;
+        paid_at: string;
+        created_at: string;
+        updated_at: string;
+    }[]>> {
+        return this.request<{
+            id: number;
+            invoice_code: string;
+            price: string;
+            payment_method: string;
+            payment_status: boolean;
+            payment_receipt: string;
+            paid_at: string;
+            created_at: string;
+            updated_at: string;
+        }[]>('/get-invoices', {
+            method: 'GET',
+        });
+    }
+
+    async createInvoice(data: {
+        price: string;
+        payment_method: string;
+    }): Promise<ApiResponse<{
+        id: number;
+        invoice_code: string;
+        price: string;
+        payment_method: string;
+        payment_status: boolean;
+        payment_receipt: string;
+        paid_at: string;
+        created_at: string;
+        updated_at: string;
+    }>> {
+        return this.request<{
+            id: number;
+            invoice_code: string;
+            price: string;
+            payment_method: string;
+            payment_status: boolean;
+            payment_receipt: string;
+            paid_at: string;
+            created_at: string;
+            updated_at: string;
+        }>('/create-invoice', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+    }
+
+    async updateInvoice(data: {
+        id: number;
+        price: string;
+        payment_method: string;
+        payment_status: boolean;
+        paid_at: string;
+        payment_receipt: string;
+    }): Promise<ApiResponse<{
+        id: number;
+        invoice_code: string;
+        price: string;
+        payment_method: string;
+        payment_status: boolean;
+        payment_receipt: string;
+        paid_at: string;
+        created_at: string;
+        updated_at: string;
+    }>> {
+        return this.request<{
+            id: number;
+            invoice_code: string;
+            price: string;
+            payment_method: string;
+            payment_status: boolean;
+            payment_receipt: string;
+            paid_at: string;
+            created_at: string;
+            updated_at: string;
+        }>('/update-invoice', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+    }
+
+    async uploadPaymentReceipt(invoiceId: number, receiptFile: File): Promise<ApiResponse<any>> {
+        const formData = new FormData();
+        formData.append('receipt', receiptFile);
+        formData.append('invoice_id', invoiceId.toString());
+
+        return this.requestWithFormData<any>('/upload-payment-receipt', formData);
+    }
 }
 
 export const apiService = new ApiService();

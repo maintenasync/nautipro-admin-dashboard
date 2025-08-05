@@ -16,6 +16,7 @@ import CrewManagement from './components/pages/CrewManagement';
 import Companies from './components/pages/Companies';
 import Vessels from './components/pages/Vessels';
 import License from './components/pages/License';
+import Invoice from './components/pages/Invoice';
 import UserSettings from './components/pages/UserSettings';
 import CreateCompany from './components/pages/CreateCompany';
 import CreateVessel from './components/pages/CreateVessel';
@@ -30,6 +31,7 @@ import {
     LicenseIcon,
     InvitationIcon,
     NotificationIcon,
+    InvoiceIcon,
     SettingsIcon
 } from './components/icons/Icons';
 import {useUserDataManager} from "@/app/hooks/useDataManager";
@@ -38,6 +40,7 @@ import {useUserDataManager} from "@/app/hooks/useDataManager";
 const menuItems = [
     { id: 'home', label: 'Dashboard', icon: HomeIcon, component: DashboardHome },
     { id: 'vessels', label: 'Vessels', icon: ShipIcon, component: Vessels },
+    { id: 'invoice', label: 'Invoices', icon: InvoiceIcon, component: Invoice },
     { id: 'license', label: 'License', icon: LicenseIcon, component: License },
     { id: 'settings', label: 'Settings', icon: SettingsIcon, component: UserSettings },
 ];
