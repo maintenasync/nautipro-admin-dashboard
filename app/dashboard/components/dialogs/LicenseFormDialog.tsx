@@ -90,8 +90,20 @@ export default function LicenseFormDialog({
 
             // Initialize form data
             if (isEditMode && licenseData) {
-                const validUntilDate = new Date(licenseData.valid_until);
-                const formattedDate = validUntilDate.toISOString().split('T')[0];
+                let formattedDate = '';
+
+                // Check if valid_until is a non-empty string.
+                // The `Date` constructor can handle various string formats,
+                // but it will fail on null, undefined, or an empty string.
+                if (typeof licenseData.valid_until === 'string' && licenseData.valid_until.length > 0) {
+                    const validUntilDate = new Date(licenseData.valid_until);
+
+                    // A valid Date object will not result in 'Invalid Date' when converted to a string.
+                    // This is a robust way to check for a valid Date object without isNaN().
+                    if (validUntilDate.toString() !== 'Invalid Date') {
+                        formattedDate = validUntilDate.toISOString().split('T')[0];
+                    }
+                }
 
                 setFormData({
                     company_id: licenseData.company_id || '',

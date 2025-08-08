@@ -53,8 +53,6 @@ const UserProfile: React.FC = () => {
             const token = localStorage.getItem('auth_token');
             const apiKey = '12345678';
 
-            console.log('Loading user data with token:', token, 'and API key:', apiKey);
-
             const response = await fetch(`https://auth.nautiproconnect.com/api/v1/web/user`, {
                 method: 'GET',
                 headers: {
@@ -83,8 +81,6 @@ const UserProfile: React.FC = () => {
         try {
             const token = localStorage.getItem('auth_token');
             const apiKey = '12345678';
-
-            console.log('Loading current session with token:', token, 'and API key:', apiKey);
 
             const response = await fetch(`https://auth.nautiproconnect.com/api/v1/web/current-session`, {
                 method: 'GET',
