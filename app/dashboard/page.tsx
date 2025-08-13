@@ -35,11 +35,13 @@ import {
     SettingsIcon
 } from './components/icons/Icons';
 import {useUserDataManager} from "@/app/hooks/useDataManager";
+import UserManagement from "@/app/dashboard/components/pages/Users";
 
 // Menu items configuration
 const menuItems = [
     { id: 'home', label: 'Dashboard', icon: HomeIcon, component: DashboardHome },
     { id: 'vessels', label: 'Vessels', icon: ShipIcon, component: Vessels },
+    {id: 'users', label: 'Users', icon: CrewIcon, component: UserManagement},
     { id: 'invoice', label: 'Invoices', icon: InvoiceIcon, component: Invoice },
     { id: 'license', label: 'License', icon: LicenseIcon, component: License },
     { id: 'settings', label: 'Settings', icon: SettingsIcon, component: UserSettings },
