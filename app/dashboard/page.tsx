@@ -12,8 +12,7 @@ import TopBar from './components/layout/TopBar';
 
 // Import page components
 import DashboardHome from './components/pages/DashboardHome';
-import CrewManagement from './components/pages/CrewManagement';
-import Companies from './components/pages/Companies';
+import ContactUs from './components/pages/ContactUs';
 import Vessels from './components/pages/Vessels';
 import License from './components/pages/License';
 import Invoice from './components/pages/Invoice';
@@ -32,7 +31,7 @@ import {
     InvitationIcon,
     NotificationIcon,
     InvoiceIcon,
-    SettingsIcon
+    SettingsIcon, MessageIcon
 } from './components/icons/Icons';
 import {useUserDataManager} from "@/app/hooks/useDataManager";
 
@@ -42,6 +41,7 @@ const menuItems = [
     { id: 'vessels', label: 'Vessels', icon: ShipIcon, component: Vessels },
     { id: 'invoice', label: 'Invoices', icon: InvoiceIcon, component: Invoice },
     { id: 'license', label: 'License', icon: LicenseIcon, component: License },
+    { id: 'contact-us', label: 'Contact Us', icon: MessageIcon, component: ContactUs },
     { id: 'settings', label: 'Settings', icon: SettingsIcon, component: UserSettings },
 ];
 
