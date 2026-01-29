@@ -1,6 +1,7 @@
 # Stage 1: Build
 FROM node:18-alpine AS builder
 
+# Install libc6-compat
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
@@ -15,15 +16,17 @@ FROM node:18-alpine AS production
 
 WORKDIR /app
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
-USER node
-
-COPY --chown=node:node --from=builder /app/.next ./.next
-COPY --chown=node:node --from=builder /app/public ./public
-COPY --chown=node:node --from=builder /app/package.json ./
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./
 
 RUN npm install --production --ignore-scripts
+
+RUN chown -R node:node /app
+
+USER node
 
 EXPOSE 3112
 
