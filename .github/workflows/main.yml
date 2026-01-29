@@ -42,7 +42,14 @@ jobs:
           script: |
             whoami
             echo ${{ secrets.DOCKER_TOKEN }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
             docker stop nautipro-admin-dashboard || true
             docker rm nautipro-admin-dashboard || true
+
             docker pull ${{ secrets.DOCKER_USERNAME }}/nautipro-admin-dashboard:latest
-            docker run --network host -d -p 3112:3112 --name nautipro-admin-dashboard ${{ secrets.DOCKER_USERNAME }}/nautipro-admin-dashboard:latest
+
+            docker run -d \
+              -p 3112:3112 \
+              --restart unless-stopped \
+              --name nautipro-admin-dashboard \
+              ${{ secrets.DOCKER_USERNAME }}/nautipro-admin-dashboard:latest
