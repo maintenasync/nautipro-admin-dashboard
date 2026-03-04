@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 # Install libc6-compat
 RUN apk add --no-cache libc6-compat
@@ -12,7 +12,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Production
-FROM node:18-alpine AS production
+FROM node:20-alpine AS production
 
 WORKDIR /app
 
