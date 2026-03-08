@@ -1,4 +1,3 @@
-// app/services/apiService.ts
 import authService from './authService';
 import type {
     ApiResponse,
@@ -8,11 +7,14 @@ import type {
     License,
     Invitation,
     VesselType,
-    UserRole
+    UserRole,
+    UserReport
 } from '@/app/types/api';
 
 const BASE_URL = 'https://auth.nautiproconnect.com/api/v1/web';
 const BASE_URL_API = 'https://dev-api.nautiproconnect.com/api/v1/web';
+const BASE_URL_MAINTENA = 'https://dev-api.nautiproconnect.com/api/v1/web-admin';
+
 
 class ApiService {
     private async request<T>(endpoint: string, options?: RequestInit): Promise<ApiResponse<T>> {
@@ -62,7 +64,7 @@ class ApiService {
 
 
 
-// ========== NOTIFICATION SETTING API ==========
+    // ========== NOTIFICATION SETTING API ==========
     async getNotificationSetting(): Promise<ApiResponse<{
         id: number;
         user_id: string;
@@ -496,6 +498,37 @@ class ApiService {
         formData.append('invoice_id', invoiceId.toString());
 
         return this.requestWithFormData<any>('/upload-payment-receipt', formData);
+    }
+
+    // ========== USER REPORTS API ==========
+
+    private async requestMaintena<T>(endpoint: string, options?: RequestInit): Promise<ApiResponse<T>> {
+        try {
+            const headers = authService.getAuthHeaders();
+            const response = await fetch(`${BASE_URL_MAINTENA}${endpoint}`, {
+                ...options,
+                headers: {
+                    ...headers,
+                    ...options?.headers,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`API Error: ${response.status} ${response.statusText}`);
+            }
+
+            const data: ApiResponse<T> = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Maintena API Request failed:', error);
+            throw error;
+        }
+    }
+
+    async getUserReports(): Promise<ApiResponse<UserReport[]>> {
+        return this.requestMaintena<UserReport[]>('/user-reports', {
+            method: 'GET',
+        });
     }
 }
 

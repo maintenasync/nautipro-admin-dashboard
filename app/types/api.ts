@@ -156,6 +156,34 @@ export interface Invitation {
     vessel: Vessel;
 }
 
+// ========== USER REPORT INTERFACES ==========
+export interface UserReport {
+    id: number;
+    user_id: string;
+    vessel_id: string;
+    report_text: string;
+    category: string;
+    priority: string;
+    title: string;
+    system_information: string;
+    log_path: string;
+    db_path: string;
+    log_download_url: string;
+    db_download_url: string;
+    is_auto: boolean;
+    created_at: string;
+    updated_at: string;
+    vessel: Vessel;
+    user: User;
+}
+
+export interface UserReportFilters {
+    search: string;
+    category: string;
+    priority: string;
+    isAuto: string;
+}
+
 // License Interfaces
 export interface License {
     license_code: string;
